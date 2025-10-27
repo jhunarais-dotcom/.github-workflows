@@ -1,0 +1,24 @@
+name: Update ads.txt
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Runs daily at midnight UTC
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Fetch latest ads.txt
+        run: curl -L https://srv.adstxtmanager.com/19390/blseriesengsub.blog -o ads.txt
+
+      - name: Commit and push
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add ads.txt
+          git commit -m "Update ads.txt"
+          git push
